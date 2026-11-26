@@ -1,0 +1,303 @@
+/*-- scss:defaults --*/
+
+$body-bg: #f8fafc;
+$body-color: #0f172a;
+$link-color: #0284c7;
+$selection-bg: #bae6fd;
+
+$presentation-heading-color: #0f172a;
+$presentation-heading-font-weight: 700;
+$presentation-font-size-root: 34px;
+$presentation-line-height: 1.35;
+
+$code-block-bg: #0f172a;
+$code-block-border-color: #1e293b;
+$code-color: #0369a1;
+
+/*-- scss:rules --*/
+
+.reveal .slides section {
+  text-align: left;
+}
+
+.reveal h1, .reveal h2 {
+  letter-spacing: -0.02em;
+}
+
+.reveal h2 {
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.2em;
+  margin-bottom: 0.6em;
+}
+
+.reveal .subtitle {
+  color: #475569;
+  font-size: 0.9em;
+}
+
+.reveal .footer {
+  color: #64748b;
+  font-size: 0.45em;
+}
+
+.reveal .callout {
+  border-radius: 8px;
+  font-size: 0.85em;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.metric-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: 3px solid #0284c7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.metric-label {
+  font-size: 0.55em;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 2px;
+}
+
+.ojs-controls {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 0.65em;
+}
+
+/* Org chart progression styles (CRO 1 -> 4 -> 8 layout) */
+.org-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 6px;
+  font-family: inherit;
+}
+
+.org-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.org-groups {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+
+.org-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ic-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.org-node {
+  border-radius: 9px;
+  padding: 7px 14px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+.org-node.leader {
+  background: #0f172a;
+  color: #f8fafc;
+  min-width: 300px;
+  border: 2px solid #0f172a;
+}
+
+.org-node.mid {
+  background: #1e3a5f;
+  color: #f8fafc;
+  width: 100%;
+  border: 2px solid #1e3a5f;
+  padding: 7px 8px;
+}
+
+.org-node.mid.writing {
+  background: #334155;
+  border-color: #334155;
+}
+
+.org-node.ic {
+  background: #ffffff;
+  color: #0f172a;
+  border: 2px solid #0284c7;
+  width: 100%;
+  padding: 6px 4px;
+}
+
+.org-node.ic.writer {
+  border-color: #0d9488;
+}
+
+.org-node .node-title {
+  font-size: 0.50em;
+  font-weight: 700;
+}
+
+.org-node.ic .node-title {
+  font-size: 0.40em;
+}
+
+.org-node .node-sub {
+  font-size: 0.36em;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.org-node.ic .node-sub {
+  font-size: 0.31em;
+  color: #475569;
+}
+
+.org-wrap.compact .org-node {
+  padding: 5px 10px;
+}
+
+.org-wrap.compact .org-node.ic {
+  padding: 5px 3px;
+}
+
+/* Connector SVG strips */
+.org-conn {
+  width: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* AI Agent pod under each IC (3 compact chips) */
+.agent-pod {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  width: 100%;
+}
+
+.agent-chip {
+  background: #eff6ff;
+  border: 1.5px dashed #6366f1;
+  border-radius: 6px;
+  padding: 4px 1px;
+  text-align: center;
+  color: #312e81;
+  line-height: 1.1;
+}
+
+.agent-chip .agent-name {
+  font-size: 0.31em;
+  font-weight: 700;
+}
+
+/* Pictorial model output cards */
+.output-single {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-top: 3px solid #0d9488;
+  border-radius: 8px;
+  padding: 6px 6px 5px 6px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05);
+}
+
+.output-single .out-label {
+  font-size: 0.33em;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 2px;
+}
+
+.output-stack {
+  background: #ffffff;
+  border: 1.5px solid #c7d2fe;
+  border-top: 3px solid #6366f1;
+  border-radius: 8px;
+  padding: 5px 4px 4px 4px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(79, 70, 229, 0.08);
+}
+
+.output-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.output-mini-cell {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 2px 1px;
+}
+
+.output-stack .out-label {
+  font-size: 0.31em;
+  font-weight: 700;
+  color: #4338ca;
+  margin-top: 3px;
+}
+
+.org-banner {
+  margin-top: 16px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 0.45em;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.org-banner.baseline {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.org-banner.multiplied {
+  background: #eef2ff;
+  border: 1.5px solid #6366f1;
+  color: #312e81;
+}
+
+.org-banner .badge {
+  background: #4f46e5;
+  color: #ffffff;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+}

@@ -1,0 +1,15 @@
+---
+title: "NeoPMx"
+subtitle: "Future-looking pharmacometrics with AI agentic workflows"
+listing:
+  contents: talks/*/*.qmd
+  sort: "date desc"
+  type: grid
+  categories: true
+  fields: [title, subtitle, date, categories]
+page-layout: full
+---
+
+Welcome to **NeoPMx** — a collection of interactive Quarto slide decks, workflow diagrams, and worked examples exploring AI-assisted, scientist-in-the-loop pharmacometrics.
+
+## Presentations

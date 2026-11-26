@@ -1,0 +1,464 @@
+---
+title: "Pharmacometrics in the Era of Agentic AI"
+subtitle: "From hand-coded control streams to scientist-in-the-loop modeling"
+author: "Ryan L. Crass"
+date: "2026-11-25"
+categories: [Agentic Workflows, R, PK/PD]
+format:
+  revealjs:
+    theme: [default, ../../assets/custom.scss]
+    slide-number: true
+    navigation-mode: linear
+    transition: fade
+    code-fold: false
+    highlight-style: github
+    footer: "NeoPMx — Agentic Pharmacometrics"
+    width: 1280
+    height: 720
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+source("../../R/helpers.R")
+```
+
+## Current Pharmacometrics Team Structure {auto-animate="true"}
+
+```{=html}
+<div class="org-wrap">
+  <!-- Level 1: Top-Level Leader -->
+  <div class="org-row" data-id="l1">
+    <div class="org-node leader">
+      <div class="node-title">Head of Pharmacometrics</div>
+    </div>
+  </div>
+
+  <!-- Connectors L1 -> 4 Functional Leads -->
+  <svg class="org-conn" viewBox="0 0 1160 28" height="28">
+    <path d="M580,0 L580,14 M142,14 L1018,14 M142,14 L142,28 M434,14 L434,28 M726,14 L726,28 M1018,14 L1018,28" stroke="#94a3b8" stroke-width="2.5" fill="none"/>
+  </svg>
+
+  <!-- 4 Functional Groups -->
+  <div class="org-groups" data-id="l2-groups">
+
+    <!-- Group 1: Data Lead -->
+    <div class="org-group">
+      <div class="org-node mid"><div class="node-title">Data Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 22" height="22">
+        <path d="M130,0 L130,11 M63,11 L197,11 M63,11 L63,22 M197,11 L197,22" stroke="#94a3b8" stroke-width="2" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic"><div class="node-title">Scientist 1</div></div>
+        <div class="org-node ic"><div class="node-title">Scientist 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 20" height="20">
+        <path d="M63,2 L63,16 M197,2 L197,16" stroke="#0d9488" stroke-width="2" fill="none"/>
+        <polygon points="59,14 67,14 63,20" fill="#0d9488"/>
+        <polygon points="193,14 201,14 197,20" fill="#0d9488"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <rect x="8" y="6" width="74" height="38" rx="3" fill="#f8fafc" stroke="#0d9488" stroke-width="1.8"/>
+            <line x1="8" y1="16" x2="82" y2="16" stroke="#0d9488" stroke-width="1.5"/>
+            <line x1="8" y1="26" x2="82" y2="26" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="8" y1="35" x2="82" y2="35" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="32" y1="6" x2="32" y2="44" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="58" y1="6" x2="58" y2="44" stroke="#cbd5e1" stroke-width="1.2"/>
+          </svg>
+          <div class="out-label">PK/PD Dataset (1×)</div>
+        </div>
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <rect x="8" y="6" width="74" height="38" rx="3" fill="#f8fafc" stroke="#0d9488" stroke-width="1.8"/>
+            <line x1="8" y1="16" x2="82" y2="16" stroke="#0d9488" stroke-width="1.5"/>
+            <line x1="8" y1="26" x2="82" y2="26" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="8" y1="35" x2="82" y2="35" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="32" y1="6" x2="32" y2="44" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="58" y1="6" x2="58" y2="44" stroke="#cbd5e1" stroke-width="1.2"/>
+          </svg>
+          <div class="out-label">ER Dataset (1×)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: PK/PD Lead -->
+    <div class="org-group">
+      <div class="org-node mid"><div class="node-title">PK/PD Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 22" height="22">
+        <path d="M130,0 L130,11 M63,11 L197,11 M63,11 L63,22 M197,11 L197,22" stroke="#94a3b8" stroke-width="2" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic"><div class="node-title">Scientist 1</div></div>
+        <div class="org-node ic"><div class="node-title">Scientist 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 20" height="20">
+        <path d="M63,2 L63,16 M197,2 L197,16" stroke="#0d9488" stroke-width="2" fill="none"/>
+        <polygon points="59,14 67,14 63,20" fill="#0d9488"/>
+        <polygon points="193,14 201,14 197,20" fill="#0d9488"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <line x1="10" y1="42" x2="82" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="10" y1="6" x2="10" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <path d="M10,42 C18,10 26,9 36,20 C50,34 66,38 82,40" fill="none" stroke="#0284c7" stroke-width="2.6"/>
+          </svg>
+          <div class="out-label">PopPK Model (1×)</div>
+        </div>
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <line x1="10" y1="42" x2="82" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="10" y1="6" x2="10" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <path d="M10,42 C18,10 26,9 36,20 C50,34 66,38 82,40" fill="none" stroke="#0284c7" stroke-width="2.6"/>
+          </svg>
+          <div class="out-label">PK/PD Model (1×)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 3: ER Lead -->
+    <div class="org-group">
+      <div class="org-node mid"><div class="node-title">ER Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 22" height="22">
+        <path d="M130,0 L130,11 M63,11 L197,11 M63,11 L63,22 M197,11 L197,22" stroke="#94a3b8" stroke-width="2" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic"><div class="node-title">Scientist 1</div></div>
+        <div class="org-node ic"><div class="node-title">Scientist 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 20" height="20">
+        <path d="M63,2 L63,16 M197,2 L197,16" stroke="#0d9488" stroke-width="2" fill="none"/>
+        <polygon points="59,14 67,14 63,20" fill="#0d9488"/>
+        <polygon points="193,14 201,14 197,20" fill="#0d9488"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <line x1="10" y1="42" x2="82" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="10" y1="6" x2="10" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <path d="M12,39 C34,39 38,12 80,10" fill="none" stroke="#0d9488" stroke-width="2.6"/>
+          </svg>
+          <div class="out-label">ER Efficacy Model (1×)</div>
+        </div>
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <line x1="10" y1="42" x2="82" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="10" y1="6" x2="10" y2="42" stroke="#cbd5e1" stroke-width="1.5"/>
+            <path d="M12,39 C34,39 38,12 80,10" fill="none" stroke="#0d9488" stroke-width="2.6"/>
+          </svg>
+          <div class="out-label">ER Safety Model (1×)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 4: Writing Lead -->
+    <div class="org-group">
+      <div class="org-node mid writing"><div class="node-title">Writing Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 22" height="22">
+        <path d="M130,0 L130,11 M63,11 L197,11 M63,11 L63,22 M197,11 L197,22" stroke="#94a3b8" stroke-width="2" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic writer"><div class="node-title">Medical Writer 1</div></div>
+        <div class="org-node ic writer"><div class="node-title">Medical Writer 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 20" height="20">
+        <path d="M63,2 L63,16 M197,2 L197,16" stroke="#0d9488" stroke-width="2" fill="none"/>
+        <polygon points="59,14 67,14 63,20" fill="#0d9488"/>
+        <polygon points="193,14 201,14 197,20" fill="#0d9488"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <rect x="24" y="4" width="42" height="42" rx="3" fill="#f8fafc" stroke="#334155" stroke-width="1.8"/>
+            <line x1="31" y1="14" x2="59" y2="14" stroke="#0284c7" stroke-width="2"/>
+            <line x1="31" y1="22" x2="59" y2="22" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="31" y1="29" x2="59" y2="29" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="31" y1="36" x2="49" y2="36" stroke="#94a3b8" stroke-width="1.6"/>
+          </svg>
+          <div class="out-label">PK/PD Report (1×)</div>
+        </div>
+        <div class="output-single">
+          <svg viewBox="0 0 90 50" width="100%" height="50">
+            <rect x="24" y="4" width="42" height="42" rx="3" fill="#f8fafc" stroke="#334155" stroke-width="1.8"/>
+            <line x1="31" y1="14" x2="59" y2="14" stroke="#0284c7" stroke-width="2"/>
+            <line x1="31" y1="22" x2="59" y2="22" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="31" y1="29" x2="59" y2="29" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="31" y1="36" x2="49" y2="36" stroke="#94a3b8" stroke-width="1.6"/>
+          </svg>
+          <div class="out-label">ER Report (1×)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="org-banner baseline">
+    <span>Baseline Capacity:</span>
+    <span>6 Scientists + 2 Medical Writers → 1× Deliverable Output</span>
+  </div>
+</div>
+```
+
+---
+
+## Pharmacometrics Team Structure with Agentic AI {auto-animate="true"}
+
+```{=html}
+<div class="org-wrap compact">
+  <!-- Level 1: Top-Level Leader -->
+  <div class="org-row" data-id="l1">
+    <div class="org-node leader">
+      <div class="node-title">Head of Pharmacometrics</div>
+    </div>
+  </div>
+
+  <!-- Connectors L1 -> 4 Functional Leads -->
+  <svg class="org-conn" viewBox="0 0 1160 22" height="22">
+    <path d="M580,0 L580,11 M142,11 L1018,11 M142,11 L142,22 M434,11 L434,22 M726,11 L726,22 M1018,11 L1018,22" stroke="#94a3b8" stroke-width="2" fill="none"/>
+  </svg>
+
+  <!-- 4 Functional Groups with 2-3 AI Agents per IC -->
+  <div class="org-groups" data-id="l2-groups">
+
+    <!-- Group 1: Data Lead -->
+    <div class="org-group">
+      <div class="org-node mid"><div class="node-title">Data Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 18" height="18">
+        <path d="M130,0 L130,9 M63,9 L197,9 M63,9 L63,18 M197,9 L197,18" stroke="#94a3b8" stroke-width="1.8" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic"><div class="node-title">Scientist 1</div></div>
+        <div class="org-node ic"><div class="node-title">Scientist 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 16" height="16">
+        <path d="M63,0 L63,8 M22,8 L104,8 M22,8 L22,16 M63,8 L63,16 M104,8 L104,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+        <path d="M197,0 L197,8 M156,8 L238,8 M156,8 L156,16 M197,8 L197,16 M238,8 L238,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 14" height="14">
+        <path d="M63,2 L63,10 M197,2 L197,10" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+        <polygon points="59,9 67,9 63,14" fill="#6366f1"/>
+        <polygon points="193,9 201,9 197,14" fill="#6366f1"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="4" y="3" width="28" height="22" rx="2" fill="#fff" stroke="#0d9488" stroke-width="1.5"/><line x1="4" y1="10" x2="32" y2="10" stroke="#0d9488" stroke-width="1.2"/><line x1="4" y1="17" x2="32" y2="17" stroke="#cbd5e1"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="4" y="3" width="28" height="22" rx="2" fill="#fff" stroke="#0d9488" stroke-width="1.5"/><line x1="4" y1="10" x2="32" y2="10" stroke="#0d9488" stroke-width="1.2"/><line x1="4" y1="17" x2="32" y2="17" stroke="#cbd5e1"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="4" y="3" width="28" height="22" rx="2" fill="#fff" stroke="#0d9488" stroke-width="1.5"/><line x1="4" y1="10" x2="32" y2="10" stroke="#0d9488" stroke-width="1.2"/><line x1="4" y1="17" x2="32" y2="17" stroke="#cbd5e1"/></svg></div>
+          </div>
+          <div class="out-label">PK/PD Dataset (2–3×)</div>
+        </div>
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="4" y="3" width="28" height="22" rx="2" fill="#fff" stroke="#0d9488" stroke-width="1.5"/><line x1="4" y1="10" x2="32" y2="10" stroke="#0d9488" stroke-width="1.2"/><line x1="4" y1="17" x2="32" y2="17" stroke="#cbd5e1"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="4" y="3" width="28" height="22" rx="2" fill="#fff" stroke="#0d9488" stroke-width="1.5"/><line x1="4" y1="10" x2="32" y2="10" stroke="#0d9488" stroke-width="1.2"/><line x1="4" y1="17" x2="32" y2="17" stroke="#cbd5e1"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="4" y="3" width="28" height="22" rx="2" fill="#fff" stroke="#0d9488" stroke-width="1.5"/><line x1="4" y1="10" x2="32" y2="10" stroke="#0d9488" stroke-width="1.2"/><line x1="4" y1="17" x2="32" y2="17" stroke="#cbd5e1"/></svg></div>
+          </div>
+          <div class="out-label">ER Dataset (2–3×)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: PK/PD Lead -->
+    <div class="org-group">
+      <div class="org-node mid"><div class="node-title">PK/PD Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 18" height="18">
+        <path d="M130,0 L130,9 M63,9 L197,9 M63,9 L63,18 M197,9 L197,18" stroke="#94a3b8" stroke-width="1.8" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic"><div class="node-title">Scientist 1</div></div>
+        <div class="org-node ic"><div class="node-title">Scientist 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 16" height="16">
+        <path d="M63,0 L63,8 M22,8 L104,8 M22,8 L22,16 M63,8 L63,16 M104,8 L104,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+        <path d="M197,0 L197,8 M156,8 L238,8 M156,8 L156,16 M197,8 L197,16 M238,8 L238,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 14" height="14">
+        <path d="M63,2 L63,10 M197,2 L197,10" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+        <polygon points="59,9 67,9 63,14" fill="#6366f1"/>
+        <polygon points="193,9 201,9 197,14" fill="#6366f1"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,24 C8,5 13,5 18,12 C24,20 29,22 33,23" fill="none" stroke="#0284c7" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,24 C8,5 13,5 18,12 C24,20 29,22 33,23" fill="none" stroke="#0284c7" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,24 C8,5 13,5 18,12 C24,20 29,22 33,23" fill="none" stroke="#0284c7" stroke-width="2"/></svg></div>
+          </div>
+          <div class="out-label">PopPK Model (2–3×)</div>
+        </div>
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,24 C8,5 13,5 18,12 C24,20 29,22 33,23" fill="none" stroke="#0284c7" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,24 C8,5 13,5 18,12 C24,20 29,22 33,23" fill="none" stroke="#0284c7" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,24 C8,5 13,5 18,12 C24,20 29,22 33,23" fill="none" stroke="#0284c7" stroke-width="2"/></svg></div>
+          </div>
+          <div class="out-label">PK/PD Model (2–3×)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 3: ER Lead -->
+    <div class="org-group">
+      <div class="org-node mid"><div class="node-title">ER Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 18" height="18">
+        <path d="M130,0 L130,9 M63,9 L197,9 M63,9 L63,18 M197,9 L197,18" stroke="#94a3b8" stroke-width="1.8" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic"><div class="node-title">Scientist 1</div></div>
+        <div class="org-node ic"><div class="node-title">Scientist 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 16" height="16">
+        <path d="M63,0 L63,8 M22,8 L104,8 M22,8 L22,16 M63,8 L63,16 M104,8 L104,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+        <path d="M197,0 L197,8 M156,8 L238,8 M156,8 L156,16 M197,8 L197,16 M238,8 L238,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 14" height="14">
+        <path d="M63,2 L63,10 M197,2 L197,10" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+        <polygon points="59,9 67,9 63,14" fill="#6366f1"/>
+        <polygon points="193,9 201,9 197,14" fill="#6366f1"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,23 C14,23 16,6 32,5" fill="none" stroke="#0d9488" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,23 C14,23 16,6 32,5" fill="none" stroke="#0d9488" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,23 C14,23 16,6 32,5" fill="none" stroke="#0d9488" stroke-width="2"/></svg></div>
+          </div>
+          <div class="out-label">ER Efficacy Model (2–3×)</div>
+        </div>
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,23 C14,23 16,6 32,5" fill="none" stroke="#0d9488" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,23 C14,23 16,6 32,5" fill="none" stroke="#0d9488" stroke-width="2"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><path d="M4,23 C14,23 16,6 32,5" fill="none" stroke="#0d9488" stroke-width="2"/></svg></div>
+          </div>
+          <div class="out-label">ER Safety Model (2–3×)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 4: Writing Lead -->
+    <div class="org-group">
+      <div class="org-node mid writing"><div class="node-title">Writing Lead</div></div>
+      <svg class="org-conn" viewBox="0 0 260 18" height="18">
+        <path d="M130,0 L130,9 M63,9 L197,9 M63,9 L63,18 M197,9 L197,18" stroke="#94a3b8" stroke-width="1.8" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="org-node ic writer"><div class="node-title">Medical Writer 1</div></div>
+        <div class="org-node ic writer"><div class="node-title">Medical Writer 2</div></div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 16" height="16">
+        <path d="M63,0 L63,8 M22,8 L104,8 M22,8 L22,16 M63,8 L63,16 M104,8 L104,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+        <path d="M197,0 L197,8 M156,8 L238,8 M156,8 L156,16 M197,8 L197,16 M238,8 L238,16" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+        <div class="agent-pod">
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+          <div class="agent-chip"><div class="agent-name">AI</div></div>
+        </div>
+      </div>
+      <svg class="org-conn" viewBox="0 0 260 14" height="14">
+        <path d="M63,2 L63,10 M197,2 L197,10" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+        <polygon points="59,9 67,9 63,14" fill="#6366f1"/>
+        <polygon points="193,9 201,9 197,14" fill="#6366f1"/>
+      </svg>
+      <div class="ic-pair">
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="8" y="3" width="20" height="22" rx="2" fill="#fff" stroke="#334155" stroke-width="1.4"/><line x1="12" y1="9" x2="24" y2="9" stroke="#0284c7" stroke-width="1.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="#94a3b8"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="8" y="3" width="20" height="22" rx="2" fill="#fff" stroke="#334155" stroke-width="1.4"/><line x1="12" y1="9" x2="24" y2="9" stroke="#0284c7" stroke-width="1.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="#94a3b8"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="8" y="3" width="20" height="22" rx="2" fill="#fff" stroke="#334155" stroke-width="1.4"/><line x1="12" y1="9" x2="24" y2="9" stroke="#0284c7" stroke-width="1.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="#94a3b8"/></svg></div>
+          </div>
+          <div class="out-label">PK/PD Report (2–3×)</div>
+        </div>
+        <div class="output-stack">
+          <div class="output-mini-grid">
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="8" y="3" width="20" height="22" rx="2" fill="#fff" stroke="#334155" stroke-width="1.4"/><line x1="12" y1="9" x2="24" y2="9" stroke="#0284c7" stroke-width="1.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="#94a3b8"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="8" y="3" width="20" height="22" rx="2" fill="#fff" stroke="#334155" stroke-width="1.4"/><line x1="12" y1="9" x2="24" y2="9" stroke="#0284c7" stroke-width="1.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="#94a3b8"/></svg></div>
+            <div class="output-mini-cell"><svg viewBox="0 0 36 28" width="100%" height="26"><rect x="8" y="3" width="20" height="22" rx="2" fill="#fff" stroke="#334155" stroke-width="1.4"/><line x1="12" y1="9" x2="24" y2="9" stroke="#0284c7" stroke-width="1.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="#94a3b8"/></svg></div>
+          </div>
+          <div class="out-label">ER Report (2–3×)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="org-banner multiplied">
+    <span class="badge">2–3× Force Multiplier</span>
+    <span>Same 8-Person CRO Delivery Team + Supervised AI Agents → 2–3× Concurrent Client Deliverables</span>
+  </div>
+</div>
+```
+
+---
+
+## Scientist-in-the-Loop Modeling Cycle
+
+```{mermaid}
+%%| echo: false
+%%| fig-width: 11
+flowchart LR
+    A["1. Scientist Spec<br/>(Objective, Priors, Guardrails)"] --> B["2. Agent: Data QC & EDA<br/>(Flags, NCA, Plots)"]
+    B --> C{"Scientist<br/>Review Gate"}
+    C -->|Revise| B
+    C -->|Approve| D["3. Agent: Model Runs<br/>(Base → Covariates → VPC)"]
+    D --> E["4. Agent: Diagnostics<br/>(GOF, Tables, Summary)"]
+    E --> F{"Scientist<br/>Decision Gate"}
+    F -->|Iterate| D
+    F -->|Sign-off| G["5. Reproducible Report<br/>(Quarto + Audit Trail)"]
+
+    style C fill:#fef3c7,stroke:#d97706,color:#0f172a
+    style F fill:#fef3c7,stroke:#d97706,color:#0f172a
+    style G fill:#dcfce7,stroke:#16a34a,color:#0f172a
+```
+
+---

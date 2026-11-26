@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "talks/**/*.qmd"
+    - "!rv/"
+
+execute:
+  freeze: auto
+
+website:
+  title: "NeoPMx"
+  description: "Interactive presentations and workflows for agentic pharmacometrics"
+  navbar:
+    background: "#0f172a"
+    foreground: "#f8fafc"
+    left:
+      - text: "Talks"
+        href: index.qmd
+    right:
+      - icon: github
+        href: https://github.com/
+        aria-label: GitHub
+
+format:
+  html:
+    theme: cosmo
+    toc: false
